@@ -11,6 +11,8 @@
   - [Linear Scale](#linear-scale)
   - [Band Scale](#band-scale)
   - [Min, Max, Extent](#min-max-extent)
+  - [Axis](#axis)
+  - [Over all procedure to create Chart](#over-all-procedure-to-create-chart)
 
 ## Description
 
@@ -135,3 +137,27 @@ rec
   - eg. `d3.min(data, (d) => d.orders)` First arg is dataset, second is the mapping to actual field for which min is to be calculated
 - max() - Rrturns max value
 - extent() - Retuns aray containing min, max
+
+## Axis
+
+- Steps to create Axis
+
+1. Create x-asic group Element using `const xAxisGroup = graph.append('g')`
+2. Similary create yaxis group Element `const yAxisGroup = graph.append('g')`
+3. Create an Actual Axis in memory based on Scale `const xAxis = d3.axisBottom(x);`
+4. Repeat the same for y `const yAxis = d3.axisLeft(y);`
+5. Display this axis created in memoery using `xAxisGroup.call(xAxis);`
+6. Repeat the same process for y `yAxisGroup.call(yAxis);`
+
+## Over all procedure to create Chart
+
+1. Select the Div elemnt
+2. Append SVG elemnt to it along with its height and width
+3. Define the margin values
+4. Create Height, Width Variable by subtracting margins
+5. Create a group and append to svg (Will be used for Actul grap)
+6. Define X and Y Scale, Band
+7. Create chart using data inside the group created in step 5
+8. Crreate x, y axis group elemnt
+9. Generate x, y axis using Scale
+10. Add this generatd x, y axis in to the group created in step 6
