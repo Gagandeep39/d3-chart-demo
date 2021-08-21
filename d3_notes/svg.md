@@ -54,6 +54,7 @@
 - It compres data and available elemnts, and according cretes new elements
 - Eg. .enter().appent('rect')
 - Here we are specifying that we jve to create new rect element to map the remainin data
+- `selectAll('rect').data(data).enter().append('rect')` line is always required, as we are required to first `check availble elements` in DOM even if there are none present
 
 ```js
 const rec = svg.selectAll('rect').data(data);
