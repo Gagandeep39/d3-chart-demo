@@ -2,10 +2,11 @@ import * as d3 from 'https://cdn.skypack.dev/d3@7';
 
 const svg = d3.select('svg');
 d3.json('05_d3-linear-scale/menu.json').then((data) => {
-  const y = d3
-    .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.orders)])
-    .range([0, 600]);
+  const min = d3.min(data, (d) => d.orders); // Find min
+  const max = d3.max(data, (d) => d.orders); // Find max
+  const extent = d3.extent(data, (d) => d.orders); // FInds min, max
+
+  const y = d3.scaleLinear().domain([0, max]).range([0, 600]);
 
   const x = d3
     .scaleBand()
@@ -29,6 +30,6 @@ d3.json('05_d3-linear-scale/menu.json').then((data) => {
     .append('rect')
     .attr('fill', 'orange')
     .attr('height', (d) => y(d.orders))
-    .attr('width', (d) => x.bandwidth())
+    .attr('width', x.bandwidth)
     .attr('x', (d, i) => x(d.name));
 });

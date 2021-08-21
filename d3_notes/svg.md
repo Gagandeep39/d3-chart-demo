@@ -10,6 +10,7 @@
   - [Enter](#enter)
   - [Linear Scale](#linear-scale)
   - [Band Scale](#band-scale)
+  - [Min, Max, Extent](#min-max-extent)
 
 ## Description
 
@@ -127,3 +128,10 @@ rec
   ```
   - x.bandwidth() calculate width based on total available width
   - x(d) Provides the x or starting point of each category bar
+
+## Min, Max, Extent
+
+- min() - Red=turns the miium value in the domain
+  - eg. `d3.min(data, (d) => d.orders)` First arg is dataset, second is the mapping to actual field for which min is to be calculated
+- max() - Rrturns max value
+- extent() - Retuns aray containing min, max
