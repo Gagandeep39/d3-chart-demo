@@ -12,6 +12,7 @@
   - [Band Scale](#band-scale)
   - [Min, Max, Extent](#min-max-extent)
   - [Axis](#axis)
+  - [INverting Axis](#inverting-axis)
   - [Over all procedure to create Chart](#over-all-procedure-to-create-chart)
 
 ## Description
@@ -148,6 +149,18 @@ rec
 4. Repeat the same for y `const yAxis = d3.axisLeft(y);`
 5. Display this axis created in memoery using `xAxisGroup.call(xAxis);`
 6. Repeat the same process for y `yAxisGroup.call(yAxis);`
+
+## INverting Axis
+
+- By default our origin is at top left corner of svg
+- X axis
+  - When we create X axis, it is shown at the top
+  - We can move it down using transform: translateY(graphHeight)
+- Y axis
+  - As it starts from 0 at top, it looks invete to us
+  - Axis can be Fixed by Changig the Scale range from `0, height` to` height, 0`
+  - Bars are drawn from top to bottom, we can move their origin of bar using `.attr('y', d => d.yAttribute)`
+  - However the data will look inconsisen as the range was inverted, so we have to fix that by substracting the height of bar with SVG height `.attr('height', (d) => graphHeight - y(d.yAttribute))`
 
 ## Over all procedure to create Chart
 

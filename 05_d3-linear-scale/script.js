@@ -35,7 +35,8 @@ d3.json('05_d3-linear-scale/menu.json').then((data) => {
   const max = d3.max(data, (d) => d.orders); // Find max
   const extent = d3.extent(data, (d) => d.orders); // FInds min, max
 
-  const y = d3.scaleLinear().domain([0, max]).range([0, graphHeight]);
+  // Starts with Graph height and end with 0 as 0 is the top of the graph, but we want that to be at bottom
+  const y = d3.scaleLinear().domain([0, max]).range([graphHeight, 0]);
 
   const x = d3
     .scaleBand()
@@ -58,9 +59,10 @@ d3.json('05_d3-linear-scale/menu.json').then((data) => {
     .enter()
     .append('rect')
     .attr('fill', 'orange')
-    .attr('height', (d) => y(d.orders))
+    .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
     .attr('width', x.bandwidth)
-    .attr('x', (d, i) => x(d.name));
+    .attr('x', (d, i) => x(d.name))
+    .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the starting point ;
 
   // Create and call axis
   const xAxis = d3.axisBottom(x);
