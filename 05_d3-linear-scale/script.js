@@ -1,7 +1,7 @@
 import * as d3 from 'https://cdn.skypack.dev/d3@7';
 
 const svg = d3.select('svg');
-d3.json('04_d3-linear-scale/menu.json').then((data) => {
+d3.json('05_d3-linear-scale/menu.json').then((data) => {
   const y = d3
     .scaleLinear()
     .domain([0, d3.max(data, (d) => d.orders)])
