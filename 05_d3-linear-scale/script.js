@@ -24,7 +24,9 @@ const graph = svg
   .attr('height', graphHeight)
   .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-const xAxisGroup = graph.append('g');
+const xAxisGroup = graph
+  .append('g')
+  .attr('transform', `translate(0, ${graphHeight})`);
 
 const yAxisGroup = graph.append('g');
 
