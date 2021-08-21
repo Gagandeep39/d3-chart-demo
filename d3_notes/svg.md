@@ -8,6 +8,7 @@
   - [Groups](#groups)
   - [Data](#data)
   - [Enter](#enter)
+  - [Linear Scale](#linear-scale)
 
 ## Description
 
@@ -54,7 +55,7 @@
 - It compres data and available elemnts, and according cretes new elements
 - Eg. .enter().appent('rect')
 - Here we are specifying that we jve to create new rect element to map the remainin data
-- `selectAll('rect').data(data).enter().append('rect')` line is always required, as we are required to first `check availble elements` in DOM even if there are none present
+- `selectAll('rect').data(data).enter().append('rect')` line is always required, as we are required to first `check/select availble elements` in DOM even if there are none present and only then we can create new element using `enter()` as required
 
 ```js
 const rec = svg.selectAll('rect').data(data);
@@ -78,3 +79,9 @@ rec
   .attr('height', (d) => d.height)
   .attr('fill', (d) => d.fill);
 ```
+
+## Linear Scale
+
+- Normalize the data based on availalbe height, width
+- Suppose we have data with value 1000 and our svg is only 200px, in such scenario are have to scale down the data
+- Highest value of dataset will be mpped to highest vlue on scale
