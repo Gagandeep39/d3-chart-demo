@@ -66,8 +66,13 @@ d3.json('05_d3-linear-scale/menu.json').then((data) => {
 
   // Create and call axis
   const xAxis = d3.axisBottom(x);
-  const yAxis = d3.axisLeft(y);
+  const yAxis = d3.axisLeft(y).ticks(2);
 
   xAxisGroup.call(xAxis);
   yAxisGroup.call(yAxis);
+
+  xAxisGroup
+    .selectAll('text')
+    .style('transform', 'rotate(-40deg)') // Rotate label
+    .attr('text-anchor', 'end'); // Origin on rotation to end of text
 });

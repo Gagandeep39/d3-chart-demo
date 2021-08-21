@@ -13,6 +13,7 @@
   - [Min, Max, Extent](#min-max-extent)
   - [Axis](#axis)
   - [INverting Axis](#inverting-axis)
+  - [Ticks](#ticks)
   - [Over all procedure to create Chart](#over-all-procedure-to-create-chart)
 
 ## Description
@@ -161,6 +162,15 @@ rec
   - Axis can be Fixed by Changig the Scale range from `0, height` to` height, 0`
   - Bars are drawn from top to bottom, we can move their origin of bar using `.attr('y', d => d.yAttribute)`
   - However the data will look inconsisen as the range was inverted, so we have to fix that by substracting the height of bar with SVG height `.attr('height', (d) => graphHeight - y(d.yAttribute))`
+
+## Ticks
+
+- Tickes are label in the a and y axxis
+- The can be minipulated in the section whe we generate the x, y axes in memory
+  - eg. `const yAxis = d3.axisLeft(y).ticks(5);` Tries to show only 5 labels ere visible on y axis
+  - eg. `.tickFormat(d => d + ' Orders')` Appends 'Orders' to Y axis labels
+- To modify **CSS Styling** of tickets, we style the actual `xAxisGroup`, `yAxisGroup` elemnt instead of axis created in memory
+  - eg. `xAxisGroup.selectAll('text').style('transform', 'rotate(40deg)');`
 
 ## Over all procedure to create Chart
 
