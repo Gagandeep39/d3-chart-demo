@@ -18,6 +18,12 @@ const margin = {
 const graphWidth = 600 - margin.left - margin.right;
 const graphHeight = 600 - margin.top - margin.bottom;
 
+const graph = svg
+  .append('g')
+  .attr('width', graphWidth)
+  .attr('height', graphHeight)
+  .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
 d3.json('05_d3-linear-scale/menu.json').then((data) => {
   const min = d3.min(data, (d) => d.orders); // Find min
   const max = d3.max(data, (d) => d.orders); // Find max
@@ -32,7 +38,7 @@ d3.json('05_d3-linear-scale/menu.json').then((data) => {
     .paddingInner(0.3)
     .paddingOuter(0.1);
 
-  const rects = svg.selectAll('rect').data(data);
+  const rects = graph.selectAll('rect').data(data);
 
   // Style Already existsting rects [CAN B REMOVED]
   rects
