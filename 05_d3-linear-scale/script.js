@@ -1,6 +1,12 @@
 import * as d3 from 'https://cdn.skypack.dev/d3@7';
 
-const svg = d3.select('svg');
+const svg = d3
+  .select('.canvas')
+  .append('svg')
+  .attr('width', 600)
+  .attr('height', 600)
+  .style('background-color', 'gray');
+
 d3.json('05_d3-linear-scale/menu.json').then((data) => {
   const min = d3.min(data, (d) => d.orders); // Find min
   const max = d3.max(data, (d) => d.orders); // Find max
