@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG Shapes</title>
+  </head>
+  <body>
+    <svg height="600" width="600">
+      <!-- Create rect element with blue color height 200 width 100 x 300 and y 100 -->
+      <rect x="300" y="100" height="200" width="100" fill="blue" />
+      <!-- Circle element with radius 50 cx 200 an cy 200 and color purple -->
+      <circle
+        stroke="purple"
+        stroke-width="2"
+        cx="200"
+        cy="200"
+        r="50"
+        fill="pink"
+      />
+      <!-- Line with x1 100 y1 100 x2 120 y2 300 stroke gray  -->
+      <line
+        x1="100"
+        y1="100"
+        x2="120"
+        y2="300"
+        stroke="gray"
+        stroke-width="2"
+      />
+      <!-- Triangle using ath -->
+      <path
+        d="M150,50 L75,200 L225,200 C225,200,150,150,150,50"
+        fill="orange"
+        stroke="red"
+        stroke-width="2"
+      />
+      <!-- Circle to show the control hand point of curve -->
+      <circle cx="150" cy="150" r="5" fill="gray" />
+      <!-- Line from 225 200 to 150 50 with stroke gray -->
+      <line
+        x1="225"
+        y1="200"
+        x2="150"
+        y2="150"
+        stroke="gray"
+        stroke-width="2"
+      />
+    </svg>
+
+    <base href="/svg-shapes" />
+  </body>
+</html>
