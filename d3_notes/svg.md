@@ -85,3 +85,12 @@ rec
 - Normalize the data based on availalbe height, width
 - Suppose we have data with value 1000 and our svg is only 200px, in such scenario are have to scale down the data
 - Highest value of dataset will be mpped to highest vlue on scale
+- Snippet
+  ```js
+  const y = d3
+    .scaleLinear()
+    .domain([0, d3.max(data, (d) => d.orders)])
+    .range([0, 600]);
+  ```
+- Range must be the width of our svg
+- Domain must reflect he min/max value of data of singlty more than the max value of data

@@ -2,6 +2,11 @@ import * as d3 from 'https://cdn.skypack.dev/d3@7';
 
 const svg = d3.select('svg');
 d3.json('04_d3-linear-scale/menu.json').then((data) => {
+  const y = d3
+    .scaleLinear()
+    .domain([0, d3.max(data, (d) => d.orders)])
+    .range([0, 600]);
+
   const rects = svg.selectAll('rect').data(data);
 
   // Style Already existsting rects [CAN B REMOVED]
@@ -16,7 +21,7 @@ d3.json('04_d3-linear-scale/menu.json').then((data) => {
     .enter()
     .append('rect')
     .attr('fill', 'orange')
-    .attr('height', (d) => d.orders)
+    .attr('height', (d) => y(d.orders))
     .attr('width', 50)
     .attr('x', (d, i) => i * 70);
 });
