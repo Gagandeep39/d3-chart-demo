@@ -7,6 +7,13 @@ d3.json('04_d3-linear-scale/menu.json').then((data) => {
     .domain([0, d3.max(data, (d) => d.orders)])
     .range([0, 600]);
 
+  const x = d3
+    .scaleBand()
+    .domain(data.map((i) => i.name))
+    .range([0, 600])
+    .paddingInner(0.3)
+    .paddingOuter(0.1);
+
   const rects = svg.selectAll('rect').data(data);
 
   // Style Already existsting rects [CAN B REMOVED]
@@ -22,6 +29,6 @@ d3.json('04_d3-linear-scale/menu.json').then((data) => {
     .append('rect')
     .attr('fill', 'orange')
     .attr('height', (d) => y(d.orders))
-    .attr('width', 50)
-    .attr('x', (d, i) => i * 70);
+    .attr('width', (d) => x.bandwidth())
+    .attr('x', (d, i) => x(d.name));
 });

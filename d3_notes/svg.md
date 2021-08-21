@@ -9,6 +9,7 @@
   - [Data](#data)
   - [Enter](#enter)
   - [Linear Scale](#linear-scale)
+  - [Band Scale](#band-scale)
 
 ## Description
 
@@ -92,5 +93,37 @@ rec
     .domain([0, d3.max(data, (d) => d.orders)])
     .range([0, 600]);
   ```
-- Range must be the width of our svg
-- Domain must reflect he min/max value of data of singlty more than the max value of data
+  - Range must be the width of our svg
+  - Domain must reflect he min/max value of data of singlty more than the max value of data
+- Using Linear Scale
+  ```js
+  .attr('height', (d) => y(d.orders))
+  ```
+  - Calculate heights relative to linear scale
+
+## Band Scale
+
+- Categorize data in a bar chart
+- Hord coding x value of rect is not good if we dont kno the number of data available, it can exceept the svg siz
+- Ensures all the data fits along the x axis
+- We pass a list of names, and bandScale utomatically calculates the width of each bar
+- Band scale assigns a bandwidth (Width) to eaach bar
+  ```js
+  const x = d3
+    .scaleBand()
+    .domain(data.map((i) => i.name))
+    .range([0, 600])
+    .paddingInner(0.3)
+    .paddingOuter(0.1);
+  ```
+- Domain species the different categories of data
+- Range specifis the min and max idth of svg
+- PaddingInner is the disance between 2 bars
+- paddingOuter is distance between svg boundary and first/ last bar
+- Using the scale
+  ```js
+   .attr('width', (d) => x.bandwidth())
+  .attr('x', (d, i) => x(d.name))
+  ```
+  - x.bandwidth() calculate width based on total available width
+  - x(d) Provides the x or starting point of each category bar
