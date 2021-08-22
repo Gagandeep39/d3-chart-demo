@@ -16,6 +16,7 @@
   - [INverting Axis](#inverting-axis)
   - [Ticks](#ticks)
   - [Over all procedure to create Chart](#over-all-procedure-to-create-chart)
+  - [Steps to Update a chart](#steps-to-update-a-chart)
 
 ## Description
 
@@ -192,3 +193,12 @@ rec
 8. Crreate x, y axis group elemnt
 9. Generate x, y axis using Scale
 10. Add this generatd x, y axis in to the group created in step 6
+
+## Steps to Update a chart
+
+1. Fetch the new dataset
+2. Update the Scale
+3. Join the elements to data using `const rec = selectAll().data()`
+4. Remov unwanted eleents using `rec.exit().remove();`
+5. Update Styling using `rects.attr(...etc)`
+6. Append the new data using `rec.enter().append('rect').attr(...etc)`

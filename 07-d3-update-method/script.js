@@ -45,11 +45,6 @@ const xAxisGroup = graph
 
 const yAxisGroup = graph.append('g');
 
-// Fetc Data
-const res = await db.collection('dishes').get();
-let data = [];
-res.forEach((dish) => data.push(dish.data()));
-
 // Scales
 const y = d3.scaleLinear().range([graphHeight, 0]);
 
@@ -63,41 +58,10 @@ const x = d3
 const xAxis = d3.axisBottom(x);
 const yAxis = d3.axisLeft(y).ticks(2);
 
-xAxisGroup.call(xAxis);
-yAxisGroup.call(yAxis);
-
 xAxisGroup
   .selectAll('text')
   .style('transform', 'rotate(-40deg)') // Rotate label
   .attr('text-anchor', 'end'); // Origin on rotation to end of text
-
-const rects = graph.selectAll('rect').data(data);
-
-// Enter()
-// Used to intsert the Elements that are waiting to Enter the DOM
-//  Can be checked by the value of rects
-// Exit()
-// COntains list of elements that are supposed to be supposed to be removed, basically extra elements
-
-// group()
-// Contains all elemnts showing on the DOM
-
-// Style Already existsting rects [CAN B REMOVED]
-rects
-  .attr('fill', 'orange')
-  .attr('height', (d) => d.orders)
-  .attr('width', 50)
-  .attr('x', (d, i) => i * 70);
-
-// Styling newly generated Elements
-rects
-  .enter()
-  .append('rect')
-  .attr('fill', 'orange')
-  .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
-  .attr('width', x.bandwidth)
-  .attr('x', (d, i) => x(d.name))
-  .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the starting point ;
 
 const update = (data) => {
   // 1. Update the Scale
@@ -105,8 +69,35 @@ const update = (data) => {
   y.domain([0, d3.max(data, (d) => d.orders)]);
 
   // 2. Join the elements to data using `const rec = selectAll().data()`
+  const rects = graph.selectAll('rect').data(data);
 
   // 3. Remov unwanted eleents using `rec.exit().remove();`
-  // 4. Update Styling using `rects.attr(...etc)`
+  rects.exit().remove();
+
+  // 4. Update Current Shapes using `rects.attr(...etc)`
+  rects
+    .attr('fill', 'orange')
+    .attr('height', (d) => d.orders)
+    .attr('width', 50)
+    .attr('x', (d, i) => i * 70);
+
   // 5. Append the new data using `rec.enter().append('rect').attr(...etc)`
+  rects
+    .enter()
+    .append('rect')
+    .attr('fill', 'orange')
+    .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
+    .attr('width', x.bandwidth)
+    .attr('x', (d, i) => x(d.name))
+    .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the starting point ;
+
+  // Update the axis aain after scale is updated
+  xAxisGroup.call(xAxis);
+  yAxisGroup.call(yAxis);
 };
+
+// Fetc Data
+const res = await db.collection('dishes').get();
+let data = [];
+res.forEach((dish) => data.push(dish.data()));
+update(data);
