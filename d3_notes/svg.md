@@ -16,6 +16,8 @@
   - [INverting Axis](#inverting-axis)
   - [Ticks](#ticks)
   - [Over all procedure to create Chart](#over-all-procedure-to-create-chart)
+  - [Transition](#transition)
+    - [Transition Bar chart](#transition-bar-chart)
   - [Steps to Update a chart](#steps-to-update-a-chart)
 
 ## Description
@@ -194,6 +196,34 @@ rec
 8. Crreate x, y axis group elemnt
 9. Generate x, y axis using Scale
 10. Add this generatd x, y axis in to the group created in step 6
+
+## Transition
+
+- Create a transition during creation, data change
+- Usually put inside .enter() as we show them hen they are created
+- We specify the initial Postion simply using `.attr(...)` and then the final posiion after `.transition().duration(500).attr(...)`
+- D3 automatically shows the state change between the states
+
+### Transition Bar chart
+
+```js
+rects
+  .enter()
+  .append('rect')
+  .attr('fill', 'orange')
+  .attr('height', 0) // Start Condition
+  .attr('y', graphHeight)
+  .attr('width', x.bandwidth)
+  .attr('x', (d, i) => x(d.name))
+  .transition()
+  .duration(500)
+  .attr('height', (d) => graphHeight - y(d.orders)) // End Condition
+  .attr('y', (d) => y(d.orders));
+```
+
+- Here we are adding transition in Bar heigh using `height`, `y`
+- INitial State is `y = graphHeight,height = 0`
+- Final State will be `y = y(d.orders), height = graphHeight - y(d.orders)`
 
 ## Steps to Update a chart
 

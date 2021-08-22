@@ -85,10 +85,15 @@ const update = (data) => {
     .enter()
     .append('rect')
     .attr('fill', 'orange')
-    .attr('height', (d) => graphHeight - y(d.orders)) // End Condition
-    .attr('y', (d) => y(d.orders))
+    .attr('height', 0) // Start Condition
+    .attr('y', graphHeight)
     .attr('width', x.bandwidth)
-    .attr('x', (d, i) => x(d.name));
+    .attr('x', (d, i) => x(d.name))
+    .transition()
+    .duration(500)
+    .attr('height', (d) => graphHeight - y(d.orders)) // End Condition
+    .attr('y', (d) => y(d.orders));
+
   // Update the axis aain after scale is updated
   xAxisGroup.call(xAxis);
   yAxisGroup.call(yAxis);
