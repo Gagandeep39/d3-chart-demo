@@ -12,6 +12,8 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+// Fixes a date related issue
+db.settings({ timestampsInSnapshots: true, merge: true });
 
 const svg = d3
   .select('.canvas')
@@ -43,49 +45,51 @@ const xAxisGroup = graph
 
 const yAxisGroup = graph.append('g');
 
-d3.json('05_d3-linear-scale/menu.json').then((data) => {
-  const min = d3.min(data, (d) => d.orders); // Find min
-  const max = d3.max(data, (d) => d.orders); // Find max
-  const extent = d3.extent(data, (d) => d.orders); // FInds min, max
+const res = await db.collection('dishes').get();
+let data = [];
+res.forEach((dish) => data.push(dish.data()));
 
-  // Starts with Graph height and end with 0 as 0 is the top of the graph, but we want that to be at bottom
-  const y = d3.scaleLinear().domain([0, max]).range([graphHeight, 0]);
+const min = d3.min(data, (d) => d.orders); // Find min
+const max = d3.max(data, (d) => d.orders); // Find max
+const extent = d3.extent(data, (d) => d.orders); // FInds min, max
 
-  const x = d3
-    .scaleBand()
-    .domain(data.map((i) => i.name))
-    .range([0, graphWidth])
-    .paddingInner(0.3)
-    .paddingOuter(0.1);
+// Starts with Graph height and end with 0 as 0 is the top of the graph, but we want that to be at bottom
+const y = d3.scaleLinear().domain([0, max]).range([graphHeight, 0]);
 
-  const rects = graph.selectAll('rect').data(data);
+const x = d3
+  .scaleBand()
+  .domain(data.map((i) => i.name))
+  .range([0, graphWidth])
+  .paddingInner(0.3)
+  .paddingOuter(0.1);
 
-  // Style Already existsting rects [CAN B REMOVED]
-  rects
-    .attr('fill', 'orange')
-    .attr('height', (d) => d.orders)
-    .attr('width', 50)
-    .attr('x', (d, i) => i * 70);
+const rects = graph.selectAll('rect').data(data);
 
-  // Styling newly generated Elements
-  rects
-    .enter()
-    .append('rect')
-    .attr('fill', 'orange')
-    .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
-    .attr('width', x.bandwidth)
-    .attr('x', (d, i) => x(d.name))
-    .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the starting point ;
+// Style Already existsting rects [CAN B REMOVED]
+rects
+  .attr('fill', 'orange')
+  .attr('height', (d) => d.orders)
+  .attr('width', 50)
+  .attr('x', (d, i) => i * 70);
 
-  // Create and call axis
-  const xAxis = d3.axisBottom(x);
-  const yAxis = d3.axisLeft(y).ticks(2);
+// Styling newly generated Elements
+rects
+  .enter()
+  .append('rect')
+  .attr('fill', 'orange')
+  .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
+  .attr('width', x.bandwidth)
+  .attr('x', (d, i) => x(d.name))
+  .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the starting point ;
 
-  xAxisGroup.call(xAxis);
-  yAxisGroup.call(yAxis);
+// Create and call axis
+const xAxis = d3.axisBottom(x);
+const yAxis = d3.axisLeft(y).ticks(2);
 
-  xAxisGroup
-    .selectAll('text')
-    .style('transform', 'rotate(-40deg)') // Rotate label
-    .attr('text-anchor', 'end'); // Origin on rotation to end of text
-});
+xAxisGroup.call(xAxis);
+yAxisGroup.call(yAxis);
+
+xAxisGroup
+  .selectAll('text')
+  .style('transform', 'rotate(-40deg)') // Rotate label
+  .attr('text-anchor', 'end'); // Origin on rotation to end of text
