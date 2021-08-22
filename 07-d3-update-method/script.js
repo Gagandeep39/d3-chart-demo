@@ -94,12 +94,30 @@ const update = (data) => {
   yAxisGroup.call(yAxis);
 };
 
+let data = [];
 // Fetc Data
 db.collection('dishes').onSnapshot((res) => {
-  // console.log(res.data());
-  let data = [];
-  res.forEach((dish) => data.push(dish.data()));
+  res.docChanges().forEach((change) => {
+    const doc = { ...change.doc.data(), id: change.doc.id };
+    switch (change.type) {
+      case 'added':
+        data.push(doc);
+        break;
+      case 'modified':
+        const index = data.findIndex((d) => d.id === doc.id);
+        data[index] = doc;
+        break;
+      case 'removed':
+        data = data.filter((d) => d.id !== doc.id);
+        break;
+      default:
+        break;
+    }
+  });
+
   update(data);
+  // res.forEach((dish) => data.push(dish.data()));
+  // update(data);
 
   // let interval = d3.interval(() => {
   //   data.pop();
