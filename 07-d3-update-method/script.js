@@ -95,15 +95,17 @@ const update = (data) => {
 };
 
 // Fetc Data
-const res = await db.collection('dishes').get();
-let data = [];
-res.forEach((dish) => data.push(dish.data()));
-update(data);
+db.collection('dishes').onSnapshot((res) => {
+  // console.log(res.data());
+  let data = [];
+  res.forEach((dish) => data.push(dish.data()));
+  update(data);
 
-let interval = d3.interval(() => {
-  data.pop();
-  if (data.length > 0) {
-    data[0].orders += 50;
-    update(data);
-  } else interval.stop();
-}, 1000);
+  // let interval = d3.interval(() => {
+  //   data.pop();
+  //   if (data.length > 0) {
+  //     data[0].orders += 50;
+  //     update(data);
+  //   } else interval.stop();
+  // }, 1000);
+});
