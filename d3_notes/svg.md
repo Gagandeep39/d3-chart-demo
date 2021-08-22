@@ -93,6 +93,7 @@ rec
 - `const rects = svg.selectAll('rect').data(dataset)` Crates an object with a list of enter(), exit(), group()
 - enter() - Contains a list of all eelemnts that will be created in DOM
 - exit() - COntains elment that must be removed and not needed in DOM (Prviously present rect elements that dont match dataset)
+  - eg. Initially there were 10 elements, after update to data set there ere 4 elements, then exit() wll contain 6 nodes
 - group() - Contains list of all DOM elements currently present inside the selected DOM
 
 ## Linear Scale
@@ -200,5 +201,5 @@ rec
 2. Update the Scale
 3. Join the elements to data using `const rec = selectAll().data()`
 4. Remov unwanted eleents using `rec.exit().remove();`
-5. Update Styling using `rects.attr(...etc)`
-6. Append the new data using `rec.enter().append('rect').attr(...etc)`
+5. Update atributes of existing DOM elements `rects.attr(...etc)`
+6. Append the new DOM elements using `rec.enter().append('rect').attr(...etc)`

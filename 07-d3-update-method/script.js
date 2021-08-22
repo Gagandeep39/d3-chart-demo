@@ -70,16 +70,15 @@ const update = (data) => {
 
   // 2. Join the elements to data using `const rec = selectAll().data()`
   const rects = graph.selectAll('rect').data(data);
-
-  // 3. Remov unwanted eleents using `rec.exit().remove();`
+  // 3. Remov unwanted eleents using `rec.exit().remove();
   rects.exit().remove();
-
   // 4. Update Current Shapes using `rects.attr(...etc)`
   rects
     .attr('fill', 'orange')
-    .attr('height', (d) => d.orders)
-    .attr('width', 50)
-    .attr('x', (d, i) => i * 70);
+    .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
+    .attr('width', x.bandwidth)
+    .attr('x', (d, i) => x(d.name))
+    .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the
 
   // 5. Append the new data using `rec.enter().append('rect').attr(...etc)`
   rects
@@ -90,7 +89,6 @@ const update = (data) => {
     .attr('width', x.bandwidth)
     .attr('x', (d, i) => x(d.name))
     .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the starting point ;
-
   // Update the axis aain after scale is updated
   xAxisGroup.call(xAxis);
   yAxisGroup.call(yAxis);
@@ -101,3 +99,13 @@ const res = await db.collection('dishes').get();
 let data = [];
 res.forEach((dish) => data.push(dish.data()));
 update(data);
+
+// d3.interval(() => {
+//   data[0].orders += 50;
+//   update(data);
+// }, 1000);
+
+setTimeout(() => {
+  data[0].orders += 200;
+  update(data.slice(0, 1));
+}, 1000);
