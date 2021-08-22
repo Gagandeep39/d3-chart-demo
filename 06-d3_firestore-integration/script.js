@@ -1,4 +1,17 @@
 import * as d3 from 'https://cdn.skypack.dev/d3@7';
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: 'AIzaSyA-fSMTaEMpolwMgHKZgAQJQk9Qi3NeYxI',
+  authDomain: 'flutter-intro-setup-gagan.firebaseapp.com',
+  databaseURL: 'https://flutter-intro-setup-gagan.firebaseio.com',
+  projectId: 'flutter-intro-setup-gagan',
+  storageBucket: 'flutter-intro-setup-gagan.appspot.com',
+  messagingSenderId: '321214862687',
+  appId: '1:321214862687:web:74d01a53c0b9f1a9b5d2ea',
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 const svg = d3
   .select('.canvas')
