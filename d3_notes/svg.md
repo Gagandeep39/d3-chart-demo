@@ -7,7 +7,8 @@
   - [Importnat mmethods](#importnat-mmethods)
   - [Groups](#groups)
   - [Data](#data)
-  - [Enter](#enter)
+  - [Enter Selection](#enter-selection)
+  - [Selection in Detail (Enter, Exit, Group)](#selection-in-detail-enter-exit-group)
   - [Linear Scale](#linear-scale)
   - [Band Scale](#band-scale)
   - [Min, Max, Extent](#min-max-extent)
@@ -55,11 +56,11 @@
 - Data function Maps data with seleced element
 - First item in data array is mapped with first element insde select array
 
-## Enter
+## Enter Selection
 
 - Creates element based on number of items in data array
 - It compres data and available elemnts, and according cretes new elements
-- Eg. .enter().appent('rect')
+- Eg. .enter().append('rect')
 - Here we are specifying that we jve to create new rect element to map the remainin data
 - `selectAll('rect').data(data).enter().append('rect')` line is always required, as we are required to first `check/select availble elements` in DOM even if there are none present and only then we can create new element using `enter()` as required
 
@@ -85,6 +86,13 @@ rec
   .attr('height', (d) => d.height)
   .attr('fill', (d) => d.fill);
 ```
+
+## Selection in Detail (Enter, Exit, Group)
+
+- `const rects = svg.selectAll('rect').data(dataset)` Crates an object with a list of enter(), exit(), group()
+- enter() - Contains a list of all eelemnts that will be created in DOM
+- exit() - COntains elment that must be removed and not needed in DOM (Prviously present rect elements that dont match dataset)
+- group() - Contains list of all DOM elements currently present inside the selected DOM
 
 ## Linear Scale
 

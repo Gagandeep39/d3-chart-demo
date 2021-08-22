@@ -63,7 +63,28 @@ const x = d3
   .paddingInner(0.3)
   .paddingOuter(0.1);
 
+// Create and call axis
+const xAxis = d3.axisBottom(x);
+const yAxis = d3.axisLeft(y).ticks(2);
+
+xAxisGroup.call(xAxis);
+yAxisGroup.call(yAxis);
+
+xAxisGroup
+  .selectAll('text')
+  .style('transform', 'rotate(-40deg)') // Rotate label
+  .attr('text-anchor', 'end'); // Origin on rotation to end of text
+
 const rects = graph.selectAll('rect').data(data);
+
+// Enter()
+// Used to intsert the Elements that are waiting to Enter the DOM
+//  Can be checked by the value of rects
+// Exit()
+// COntains list of elements that are supposed to be supposed to be removed, basically extra elements
+
+// group()
+// Contains all elemnts showing on the DOM
 
 // Style Already existsting rects [CAN B REMOVED]
 rects
@@ -81,15 +102,3 @@ rects
   .attr('width', x.bandwidth)
   .attr('x', (d, i) => x(d.name))
   .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the starting point ;
-
-// Create and call axis
-const xAxis = d3.axisBottom(x);
-const yAxis = d3.axisLeft(y).ticks(2);
-
-xAxisGroup.call(xAxis);
-yAxisGroup.call(yAxis);
-
-xAxisGroup
-  .selectAll('text')
-  .style('transform', 'rotate(-40deg)') // Rotate label
-  .attr('text-anchor', 'end'); // Origin on rotation to end of text
