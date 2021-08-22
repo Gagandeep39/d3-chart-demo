@@ -79,7 +79,7 @@ const update = (data) => {
   rects
     .attr('fill', 'orange')
     .attr('x', (d, i) => x(d.name))
-    .attr('width', x.bandwidth);
+    .attr('width', 0);
 
   // 5. Append the new data using `rec.enter().append('rect').attr(...etc)`
   rects
@@ -92,6 +92,7 @@ const update = (data) => {
     .attr('x', (d, i) => x(d.name))
     .merge(rects)
     .transition()
+    .attrTween('width', widthTeen)
     .attr('height', (d) => graphHeight - y(d.orders)) // End Condition
     .attr('y', (d) => y(d.orders));
 
@@ -127,6 +128,14 @@ db.collection('dishes').onSnapshot((res) => {
     update(data);
   }, 4000);
 });
+
+const widthTeen = (d) => {
+  let i = d3.interpolate(0, x.bandwidth());
+
+  return function (t) {
+    return i(t);
+  };
+};
 
 // Crete starting condition
 // . Specfiy Starting oint in Y o.e
