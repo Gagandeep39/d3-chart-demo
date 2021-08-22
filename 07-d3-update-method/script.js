@@ -100,12 +100,10 @@ let data = [];
 res.forEach((dish) => data.push(dish.data()));
 update(data);
 
-// d3.interval(() => {
-//   data[0].orders += 50;
-//   update(data);
-// }, 1000);
-
-setTimeout(() => {
-  data[0].orders += 200;
-  update(data.slice(0, 1));
+let interval = d3.interval(() => {
+  data.pop();
+  if (data.length > 0) {
+    data[0].orders += 50;
+    update(data);
+  } else interval.stop();
 }, 1000);
