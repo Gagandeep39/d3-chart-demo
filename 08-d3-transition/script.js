@@ -63,7 +63,10 @@ xAxisGroup
   .style('transform', 'rotate(-40deg)') // Rotate label
   .attr('text-anchor', 'end'); // Origin on rotation to end of text
 
+// const t = d3.transition().duration(500);
+
 const update = (data) => {
+  console.log(data);
   // 1. Update the Scale
   x.domain(data.map((i) => i.name));
   y.domain([0, d3.max(data, (d) => d.orders)]);
@@ -76,23 +79,19 @@ const update = (data) => {
   rects
     .attr('fill', 'orange')
     .attr('x', (d, i) => x(d.name))
-    .attr('width', x.bandwidth)
-    .transition()
-    .duration(500)
-    .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
-
-    .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the
+    .attr('width', x.bandwidth);
 
   // 5. Append the new data using `rec.enter().append('rect').attr(...etc)`
   rects
     .enter()
     .append('rect')
     .attr('fill', 'orange')
+    .attr('width', x.bandwidth)
     .attr('height', 0) // Start Condition
     .attr('y', graphHeight)
     .attr('x', (d, i) => x(d.name))
+    .merge(rects)
     .transition()
-    .duration(500)
     .attr('height', (d) => graphHeight - y(d.orders)) // End Condition
     .attr('y', (d) => y(d.orders));
 
@@ -121,13 +120,12 @@ db.collection('dishes').onSnapshot((res) => {
         break;
     }
   });
-
   update(data);
   setTimeout(() => {
     console.log('trigerred');
     data[0].orders += 400;
     update(data);
-  }, 3000);
+  }, 4000);
 });
 
 // Crete starting condition

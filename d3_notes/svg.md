@@ -18,6 +18,7 @@
   - [Over all procedure to create Chart](#over-all-procedure-to-create-chart)
   - [Transition](#transition)
     - [Transition Bar chart](#transition-bar-chart)
+    - [Merge](#merge)
   - [Steps to Update a chart](#steps-to-update-a-chart)
 
 ## Description
@@ -228,18 +229,44 @@ rects
 - Final State will be `y = y(d.orders), height = graphHeight - y(d.orders)`
 
 - Transition without .enter()
+
   - Here we are applying transition whose initial state is already present
   - Trsnaiton are applied on data update, so from previous position to new poistion
   - SO we dont need to specify initial properties
+
   ```js
   rects
     .attr('fill', 'orange')
     .attr('x', (d, i) => x(d.name))
+    .attr('width', x.bandwidth)
     .transition()
     .duration(500)
     .attr('height', (d) => graphHeight - y(d.orders))
     .attr('y', (d) => y(d.orders));
   ```
+
+### Merge
+
+- Allows reusing transition
+- If we have specifed the final state of transitio inside enter()
+  - we can reuse it using .merge(rects) inside .enter()
+  - We can then remove .transition().attr (...) in other parts
+  - Baically we are telling to apply transition property to current rects and previous rects in DOM
+
+````js
+  rects
+    .enter()
+    .append('rect')
+    .attr('fill', 'orange')
+    .attr('width', x.bandwidth)
+    .attr('height', 0) // Start Condition
+    .attr('y', graphHeight)
+    .attr('x', (d, i) => x(d.name))
+    .merge(rects)
+    .transition()
+    .attr('height', (d) => graphHeight - y(d.orders)) // End Condition
+    .attr('y', (d) => y(d.orders));
+```
 
 ## Steps to Update a chart
 
@@ -249,3 +276,4 @@ rects
 4. Remov unwanted eleents using `rec.exit().remove();`
 5. Update atributes of existing DOM elements `rects.attr(...etc)`
 6. Append the new DOM elements using `rec.enter().append('rect').attr(...etc)`
+````
