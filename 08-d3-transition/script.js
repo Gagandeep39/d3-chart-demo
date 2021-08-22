@@ -75,9 +75,12 @@ const update = (data) => {
   // 4. Update Current Shapes using `rects.attr(...etc)`
   rects
     .attr('fill', 'orange')
-    .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
-    .attr('width', x.bandwidth)
     .attr('x', (d, i) => x(d.name))
+    .attr('width', x.bandwidth)
+    .transition()
+    .duration(500)
+    .attr('height', (d) => graphHeight - y(d.orders)) //Fixes height when Y range is inverted
+
     .attr('y', (d) => y(d.orders)); // Inverts the Chart bars by moving the
 
   // 5. Append the new data using `rec.enter().append('rect').attr(...etc)`
@@ -87,7 +90,6 @@ const update = (data) => {
     .attr('fill', 'orange')
     .attr('height', 0) // Start Condition
     .attr('y', graphHeight)
-    .attr('width', x.bandwidth)
     .attr('x', (d, i) => x(d.name))
     .transition()
     .duration(500)
@@ -121,6 +123,11 @@ db.collection('dishes').onSnapshot((res) => {
   });
 
   update(data);
+  setTimeout(() => {
+    console.log('trigerred');
+    data[0].orders += 400;
+    update(data);
+  }, 3000);
 });
 
 // Crete starting condition

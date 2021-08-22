@@ -206,6 +206,8 @@ rec
 
 ### Transition Bar chart
 
+- Transition in .enter()
+
 ```js
 rects
   .enter()
@@ -224,6 +226,20 @@ rects
 - Here we are adding transition in Bar heigh using `height`, `y`
 - INitial State is `y = graphHeight,height = 0`
 - Final State will be `y = y(d.orders), height = graphHeight - y(d.orders)`
+
+- Transition without .enter()
+  - Here we are applying transition whose initial state is already present
+  - Trsnaiton are applied on data update, so from previous position to new poistion
+  - SO we dont need to specify initial properties
+  ```js
+  rects
+    .attr('fill', 'orange')
+    .attr('x', (d, i) => x(d.name))
+    .transition()
+    .duration(500)
+    .attr('height', (d) => graphHeight - y(d.orders))
+    .attr('y', (d) => y(d.orders));
+  ```
 
 ## Steps to Update a chart
 
