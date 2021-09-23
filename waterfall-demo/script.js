@@ -1,19 +1,18 @@
 import * as d3 from 'https://cdn.skypack.dev/d3@7';
 
 let data = [
-  { name: 'Product Revenue', value: 42000 },
-  { name: 'Services Revenue', value: 21000 },
-  { name: 'Fixed Costs', value: -17000 },
-  { name: 'Variable Costs', value: -14000 },
+  { name: 'Product Revenue', value: 42000, class: 'positive' },
+  { name: 'Services Revenue', value: 21000, class: 'positive' },
+  { name: 'Fixed Costs', value: 17000, class: 'negative' },
+  { name: 'Variable Costs', value: 14000, class: 'negative' },
 ];
 
 let cumulative = 0;
 for (let i = 0; i < data.length; i++) {
   data[i].start = cumulative;
-  cumulative += data[i].value;
+  if (data[i].class === 'positive') cumulative += data[i].value;
+  else cumulative -= data[i].value;
   data[i].end = cumulative;
-
-  data[i].class = data[i].value >= 0 ? 'positive' : 'negative';
 }
 data.push({
   name: 'Total',
@@ -31,6 +30,8 @@ data = data.map((d) => {
   }
   return d;
 });
+
+console.log(data);
 var width = 600;
 var height = 300;
 var chart = d3
