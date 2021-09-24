@@ -113,8 +113,6 @@ bar
   .style('background-color', function (d, i) {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   })
-  // .style('border-top', '1px solid black')
-  // .style('border-bottom', '1px solid black')
   .style('height', (d) => {
     return Math.abs(y(d.start) - y(d.end)) + 'px';
   })
@@ -125,62 +123,26 @@ bar
   .on('click', (d) => {
     console.log(d);
   });
-// console.log(bar);
 
-// console.log(bar.selectAll('.bar'));
-// Draw line for connecting each bar
+// Connector
 bar
   .enter()
-  .append('svg')
-  .style('z-index', () => -1)
-  .append('line')
-  .attr('x1', (d) => x(d.name))
-  .attr('y1', (d, i) => {
-    const fromBottom = () =>
-      y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end));
-    const fromTop = () => y(Math.max(d.start, d.end));
-
-    if (data[i].class === 'negative') return fromBottom();
-    return fromTop();
+  .append('div')
+  .style('display', 'inline-block')
+  .style('position', 'absolute')
+  .style('height', '1px')
+  .style('background-color', 'black')
+  .style('left', (d) => {
+    return x(d.name) + 'px';
   })
-  .attr('x2', (d, i) => {
-    return data[i + 1]
-      ? x(data[i + 1].name) + x.bandwidth()
-      : x(d.name) + x.bandwidth();
-  })
-  .attr('y2', (d, i) => {
-    const toTop = () => y(Math.max(data[i + 1].start, data[i + 1].end));
-    const toBottom = () =>
-      y(Math.max(data[i + 1].start, data[i + 1].end)) +
-      Math.abs(y(data[i + 1].start) - y(data[i + 1].end));
-
-    if (d.class === 'total') return y(d.start);
-
-    // if (data && data[i + 1]) {
-    if (data[i + 1].class === 'positive' && data[i].class === 'positive') {
-      return toBottom();
-    } else if (
-      data[i].class === 'negative' &&
-      data[i + 1]?.class === 'positive'
-    ) {
-      return toBottom();
-    } else if (
-      data[i].class === 'positive' &&
-      data[i + 1].class === 'negative'
-    ) {
-      return toTop();
-    } else if (
-      data[i].class === 'negative' &&
-      data[i + 1].class === 'negative'
-    ) {
-      return toTop();
-    } else if (data[i + 1]?.class === 'total') {
-      return toTop();
-    }
-    // } else 0;
-  })
-  .attr('stroke-width', '1')
-  .attr('stroke', 'black');
+  .style('width', (d) =>
+    d.class === 'total' ? 0 : x.bandwidth() * 2 + x.padding() * x.step() + 'px'
+  )
+  .style('top', (d) =>
+    d.class === 'positive'
+      ? y(Math.max(d.start, d.end)) + 'px'
+      : y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end)) + 'px'
+  );
 
 // Add label
 bar
