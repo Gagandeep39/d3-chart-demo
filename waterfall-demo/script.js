@@ -1,10 +1,48 @@
 import * as d3 from 'https://cdn.skypack.dev/d3@7';
 
+// let data = [
+//   { name: 'Product Revenue', value: 42000, class: 'positive' },
+//   { name: 'Services Revenue', value: 21000, class: 'positive' },
+//   { name: 'Fixed Costs', value: 17000, class: 'negative' },
+//   { name: 'Variable Costs', value: 14000, class: 'negative' },
+// ];
+
 let data = [
-  { name: 'Product Revenue', value: 42000, class: 'positive' },
-  { name: 'Services Revenue', value: 21000, class: 'positive' },
-  { name: 'Fixed Costs', value: 17000, class: 'negative' },
-  { name: 'Variable Costs', value: 14000, class: 'negative' },
+  {
+    name: 'Estimation without GreenStruxure* ($ 105.5k)',
+    value: 105000,
+    class: 'positive',
+  },
+  {
+    name: 'DC costs reduction* ($ 17.5k) ddfdfdf sdsdsdsd',
+    value: 17000,
+    class: 'negative',
+  },
+  {
+    name: 'Energy costs reduction* ($ 41.6k)',
+    value: 41000,
+    class: 'negative',
+  },
+  {
+    name: 'Estimation without GreenStruxure* ($ 10',
+    value: 22000,
+    class: 'positive',
+  },
+  {
+    name: 'Estimation without GreenStruxure* ($ 105.5k',
+    value: 9000,
+    class: 'positive',
+  },
+  {
+    name: 'Estimation without($ 105.5k)',
+    value: 2000,
+    class: 'positive',
+  },
+  {
+    name: 'without GreenStruxssdsdure* ($ 105.5k)',
+    value: 80000,
+    class: 'total',
+  },
 ];
 
 let cumulative = 0;
@@ -14,12 +52,12 @@ for (let i = 0; i < data.length; i++) {
   else cumulative -= data[i].value;
   data[i].end = cumulative;
 }
-data.push({
-  name: 'Total',
-  end: cumulative,
-  start: 0,
-  class: 'total',
-});
+// data.push({
+//   name: 'Total',
+//   end: cumulative,
+//   start: 0,
+//   class: 'total',
+// });
 
 data = data.map((d) => {
   if (d.start < 0) {
@@ -121,6 +159,11 @@ bar
       return y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end));
     } else if (data[i].class === 'negative' && data[i + 1]?.class === 'total') {
       return y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end));
+    } else if (
+      data[i].class === 'negative' &&
+      data[i + 1]?.class === 'positive'
+    ) {
+      return y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end));
     }
 
     return y(Math.max(d.start, d.end));
@@ -152,6 +195,19 @@ bar
         data[i + 1]?.class === 'total'
       ) {
         return y(Math.max(data[i + 1].start, data[i + 1].end));
+      } else if (
+        data[i].class === 'negative' &&
+        data[i + 1]?.class === 'positive'
+      ) {
+        return (
+          y(Math.max(data[i + 1].start, data[i + 1].end)) +
+          Math.abs(y(data[i + 1].start) - y(data[i + 1].end))
+        );
+      } else if (
+        data[i].class === 'positive' &&
+        data[i + 1]?.class === 'total'
+      ) {
+        return y(Math.max(data[i + 1].start, data[i + 1].end));
       }
     } else return y(Math.max(d.start, d.end));
   })
@@ -163,11 +219,13 @@ bar
   .append('span')
   .attr('style', 'position: absolute;display: block;white-space: pre-line;')
   .style('left', (d) => {
-    console.log(x(d.name));
     return x(d.name) + 'px';
   })
   .style('top', (d) => {
-    return y(d.end) + 'px';
+    if (d.class === 'negative') {
+      return y(d.end) + 'px';
+    }
+    return y(Math.max(d.start, d.end)) + 'px';
   })
   .style('width', () => x.bandwidth() * 2 + 'px')
   .style('transform', (d) => {
@@ -178,5 +236,5 @@ bar
     }
   })
   .style('word-break', 'break-all')
-  .text('Estimation without GreenStruxure* \n ($ 105.5k)')
+  .text((d) => d.name)
   .style('text-align', 'center');
