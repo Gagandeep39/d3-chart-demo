@@ -66,13 +66,7 @@ data = data.map((d) => {
 console.log(data);
 var width = 600;
 var height = 300;
-var chart = d3
-  .select('.graph')
-  .style('position', 'relative')
-  .attr('width', width + 'px')
-  .attr('height', height + 'px');
-// .append('g');
-// Scale
+var chart = d3.select('.graph').style('position', 'relative');
 let x = d3.scaleBand().range([0, width]).padding(0.4);
 
 let y = d3.scaleLinear().range([height, 0]);
@@ -95,17 +89,8 @@ bar
   .enter()
   .append('div')
   .attr('style', 'display: inline-block; position: absolute')
-  .attr('y', function (d) {
-    return y(Math.max(d.start, d.end));
-  })
   .style('top', (d) => {
     return y(Math.max(d.start, d.end)) + 'px';
-  })
-  .attr('height', function (d) {
-    return Math.abs(y(d.start) - y(d.end)) + 'px';
-  })
-  .attr('width', () => {
-    return x.bandwidth() + 'px';
   })
   .style('width', () => {
     return x.bandwidth() + 'px';
@@ -119,7 +104,6 @@ bar
   .style('transform', (d) => {
     return 'translate(' + x(d.name) + 'px,0px)';
   })
-  .attr('class', (d, i) => i)
   .on('click', (d) => {
     console.log(d);
   });
