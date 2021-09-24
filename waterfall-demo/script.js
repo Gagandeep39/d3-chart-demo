@@ -156,3 +156,27 @@ bar
     } else return y(Math.max(d.start, d.end));
   })
   .attr('stroke', 'black');
+
+// Add label
+bar
+  .enter()
+  .append('span')
+  .attr('style', 'position: absolute;display: block;white-space: pre-line;')
+  .style('left', (d) => {
+    console.log(x(d.name));
+    return x(d.name) + 'px';
+  })
+  .style('top', (d) => {
+    return y(d.end) + 'px';
+  })
+  .style('width', () => x.bandwidth() * 2 + 'px')
+  .style('transform', (d) => {
+    if (d.class === 'positive' || d.class === 'total') {
+      return `translate(-${x.bandwidth() / 2 + 'px'}, -100%)`;
+    } else {
+      return `translate(-${x.bandwidth() / 2 + 'px'}, 0)`;
+    }
+  })
+  .style('word-break', 'break-all')
+  .text('Estimation without GreenStruxure* \n ($ 105.5k)')
+  .style('text-align', 'center');
