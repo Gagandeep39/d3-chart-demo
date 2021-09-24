@@ -113,7 +113,8 @@ bar
   .style('background-color', function (d, i) {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   })
-  .style('outline', '1px solid black')
+  // .style('border-top', '1px solid black')
+  // .style('border-bottom', '1px solid black')
   .style('height', (d) => {
     return Math.abs(y(d.start) - y(d.end)) + 'px';
   })
@@ -148,43 +149,37 @@ bar
       : x(d.name) + x.bandwidth();
   })
   .attr('y2', (d, i) => {
-    if (data && data[i + 1]) {
-      if (data[i + 1].class === 'positive' && data[i].class === 'positive') {
-        return (
-          y(Math.max(data[i + 1].start, data[i + 1].end)) +
-          Math.abs(y(data[i + 1].start) - y(data[i + 1].end))
-        );
-      } else if (
-        data[i + 1].class === 'negative' &&
-        data[i].class === 'positive'
-      ) {
-        return y(Math.max(data[i + 1].start, data[i + 1].end));
-      } else if (
-        data[i + 1].class === 'negative' &&
-        data[i].class === 'negative'
-      ) {
-        return y(Math.max(data[i + 1].start, data[i + 1].end));
-      } else if (
-        data[i].class === 'negative' &&
-        data[i + 1]?.class === 'total'
-      ) {
-        return y(Math.max(data[i + 1].start, data[i + 1].end));
-      } else if (
-        data[i].class === 'negative' &&
-        data[i + 1]?.class === 'positive'
-      ) {
-        return (
-          y(Math.max(data[i + 1].start, data[i + 1].end)) +
-          Math.abs(y(data[i + 1].start) - y(data[i + 1].end))
-        );
-      } else if (
-        data[i].class === 'positive' &&
-        data[i + 1]?.class === 'total'
-      ) {
-        return y(Math.max(data[i + 1].start, data[i + 1].end));
-      }
-    } else return y(Math.max(d.start, d.end));
+    const toTop = () => y(Math.max(data[i + 1].start, data[i + 1].end));
+    const toBottom = () =>
+      y(Math.max(data[i + 1].start, data[i + 1].end)) +
+      Math.abs(y(data[i + 1].start) - y(data[i + 1].end));
+
+    if (d.class === 'total') return y(d.start);
+
+    // if (data && data[i + 1]) {
+    if (data[i + 1].class === 'positive' && data[i].class === 'positive') {
+      return toBottom();
+    } else if (
+      data[i].class === 'negative' &&
+      data[i + 1]?.class === 'positive'
+    ) {
+      return toBottom();
+    } else if (
+      data[i].class === 'positive' &&
+      data[i + 1].class === 'negative'
+    ) {
+      return toTop();
+    } else if (
+      data[i].class === 'negative' &&
+      data[i + 1].class === 'negative'
+    ) {
+      return toTop();
+    } else if (data[i + 1]?.class === 'total') {
+      return toTop();
+    }
+    // } else 0;
   })
+  .attr('stroke-width', '1')
   .attr('stroke', 'black');
 
 // Add label
