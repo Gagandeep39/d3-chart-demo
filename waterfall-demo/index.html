@@ -15,10 +15,20 @@
     <title>Project Starter</title>
   </head>
   <body>
-    <svg class="graph"></svg>
+    <div class="graph"></div>
 
     <!-- Javascript Code, Must always be at bottom -->
     <script type="module" src="script.js"></script>
     <base href="/" />
+    <style>
+      .graph {
+        width: 20px;
+        overflow: hidden;
+        transition: all 0.5s ease;
+      }
+      .graph:hover {
+        width: 600px;
+      }
+    </style>
   </body>
 </html>
