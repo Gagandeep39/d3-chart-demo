@@ -34,13 +34,9 @@ data = data.map((d) => {
 console.log(data);
 var width = 600;
 var height = 300;
-var chart = d3
-  .select('.graph')
-  .attr('width', width)
-  .attr('height', height)
-  .append('g');
+var chart = d3.select('.graph').attr('width', width).attr('height', height);
 // Scale
-let x = d3.scaleBand().range([0, width]);
+let x = d3.scaleBand().range([0, width]).padding(0.4);
 
 let y = d3.scaleLinear().range([height, 0]);
 
@@ -76,4 +72,70 @@ bar
   .attr('height', function (d) {
     return Math.abs(y(d.start) - y(d.end));
   })
-  .attr('width', x.bandwidth);
+  .attr('width', x.bandwidth)
+  .attr('fill', function (d) {
+    return '#' + Math.random().toString(16).substr(-6);
+  });
+
+// Create a line between each bar
+
+for (let i = 0; i < data.length; i++) {
+  chart
+    .append('line')
+    .attr('x1', (d) => {
+      return x(data[i].name);
+    })
+    .attr('x2', (d) => {
+      console.log(i, d);
+      if (i === data.length - 1) {
+        return x(data[i].name);
+      }
+      return data[i + 1]
+        ? x(data[i + 1].name) + x.bandwidth()
+        : x(d.name) + x.bandwidth();
+    })
+    .attr('y1', (d) => {
+      if (data[i].class === 'negative' && data[i + 1]?.class === 'negative') {
+        console.log(i);
+        return (
+          y(Math.max(data[i].start, data[i].end)) +
+          Math.abs(y(data[i].start) - y(data[i].end))
+        );
+      } else if (
+        data[i].class === 'negative' &&
+        data[i + 1]?.class === 'total'
+      ) {
+        return (
+          y(Math.max(data[i].start, data[i].end)) +
+          Math.abs(y(data[i].start) - y(data[i].end))
+        );
+      }
+      return y(Math.max(data[i].start, data[i].end));
+    })
+    .attr('y2', () => {
+      if (data && data[i + 1]) {
+        if (data[i + 1].class === 'positive' && data[i].class === 'positive') {
+          return (
+            y(Math.max(data[i + 1].start, data[i + 1].end)) +
+            Math.abs(y(data[i + 1].start) - y(data[i + 1].end))
+          );
+        } else if (
+          data[i + 1].class === 'negative' &&
+          data[i].class === 'positive'
+        ) {
+          return y(Math.max(data[i + 1].start, data[i + 1].end));
+        } else if (
+          data[i + 1].class === 'negative' &&
+          data[i].class === 'negative'
+        ) {
+          return y(Math.max(data[i + 1].start, data[i + 1].end));
+        } else if (
+          data[i].class === 'negative' &&
+          data[i + 1]?.class === 'total'
+        ) {
+          return y(Math.max(data[i + 1].start, data[i + 1].end));
+        }
+      } else return y(Math.max(data[i].start, data[i].end));
+    })
+    .attr('stroke', 'black');
+}
