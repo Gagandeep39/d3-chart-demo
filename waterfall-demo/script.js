@@ -64,24 +64,27 @@ data = data.map((d) => {
 });
 
 console.log(data);
-var width = 600;
+var width = '100%';
 var height = 300;
 var chart = d3
   .select('.graph')
   .style('position', 'relative')
+  .style('display', 'flex')
+  .style('justify-content', 'space-evenly')
   .attr('width', width + 'px')
+  .style('width', width)
   .attr('height', height + 'px');
 // .append('g');
 // Scale
-let x = d3.scaleBand().range([0, width]).padding(0.4);
+// let x = d3.scaleBand().range([0, 600]).padding(0.4);
 
 let y = d3.scaleLinear().range([height, 0]);
 
-x.domain(
-  data.map(function (d) {
-    return d.name;
-  })
-);
+// x.domain(
+//   data.map(function (d) {
+//     return d.name;
+//   })
+// );
 y.domain([
   0,
   d3.max(data, function (d) {
@@ -94,78 +97,102 @@ var bar = chart.selectAll('.bar').data(data);
 bar
   .enter()
   .append('div')
-  .attr('style', 'display: inline-block; position: absolute')
-  .attr('y', function (d) {
-    return y(Math.max(d.start, d.end));
-  })
-  .style('top', (d) => {
-    return y(Math.max(d.start, d.end)) + 'px';
-  })
-  .attr('height', function (d) {
-    return Math.abs(y(d.start) - y(d.end)) + 'px';
-  })
-  .attr('width', () => {
-    return x.bandwidth() + 'px';
-  })
+  .attr('style', 'display: inline-block;')
+
   .style('width', () => {
-    return x.bandwidth() + 'px';
-  })
-  .style('background-color', function (d, i) {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    return '50px';
   })
   .style('height', (d) => {
     return Math.abs(y(d.start) - y(d.end)) + 'px';
   })
-  .style('transform', (d) => {
-    return 'translate(' + x(d.name) + 'px,0px)';
+  .style('background-color', function (d, i) {
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
   })
-  .attr('class', (d, i) => i)
+  .style(
+    'transform',
+    (d) => `translate(-50%, ${y(Math.max(d.start, d.end))}px)`
+  )
+  // .style('margin-top', (d) => y(Math.max(d.start, d.end)) + 'px')
+  // .style('margin-left', '20px')
   .on('click', (d) => {
     console.log(d);
   });
 
 // Connector
-bar
-  .enter()
+// bar
+//   .enter()
+//   .append('div')
+//   .style('display', 'inline-block')
+//   .style('position', 'absolute')
+//   .style('height', '1px')
+//   .style('background-color', 'black')
+//   .style('left', (d) => {
+//     return x(d.name) + 'px';
+//   })
+//   .style('width', (d) =>
+//     d.class === 'total' ? 0 : x.bandwidth() * 2 + x.padding() * x.step() + 'px'
+//   )
+//   .style('top', (d) =>
+//     d.class === 'positive'
+//       ? y(Math.max(d.start, d.end)) + 'px'
+//       : y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end)) + 'px'
+//   );
+
+// // Add label
+// bar
+//   .enter()
+//   .append('span')
+//   .attr('style', 'position: absolute;display: block;white-space: pre-line;')
+//   .style('left', (d) => {
+//     return x(d.name) + 'px';
+//   })
+//   .style('top', (d) => {
+//     if (d.class === 'negative') {
+//       return y(d.end) + 'px';
+//     }
+//     return y(Math.max(d.start, d.end)) + 'px';
+//   })
+//   .style('width', () => x.bandwidth() * 2 + 'px')
+//   .style('transform', (d) => {
+//     if (d.class === 'positive' || d.class === 'total') {
+//       return `translate(-${x.bandwidth() / 2 + 'px'}, -100%)`;
+//     } else {
+//       return `translate(-${x.bandwidth() / 2 + 'px'}, 0)`;
+//     }
+//   })
+//   .style('word-break', 'break-all')
+//   .text((d) => d.name)
+//   .style('text-align', 'center');
+
+// Connectio
+
+// bar
+//   .enter()
+//   .append('div')
+//   .attr('style', 'display: inline-block;')
+//   .style('width', '100%')
+//   .style('height', '1px')
+//   .style('background-color', 'black');
+let a = chart
   .append('div')
-  .style('display', 'inline-block')
+  .style('width', '100%')
+  .style('height', '100%')
   .style('position', 'absolute')
+  .style('display', 'flex')
+  .style('justify-content', 'space-between')
+  .style('backgroud-color', 'green')
+  .style('top', 0)
+  .style('left', 0)
+  .selectAll('.line-item')
+  .data(data);
+a.enter()
+  .append('div')
+  .style('width', '100%')
   .style('height', '1px')
   .style('background-color', 'black')
-  .style('left', (d) => {
-    return x(d.name) + 'px';
-  })
-  .style('width', (d) =>
-    d.class === 'total' ? 0 : x.bandwidth() * 2 + x.padding() * x.step() + 'px'
-  )
-  .style('top', (d) =>
-    d.class === 'positive'
-      ? y(Math.max(d.start, d.end)) + 'px'
-      : y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end)) + 'px'
+  .style(
+    'transform',
+    (d) => `translate(0px, ${y(Math.max(d.start, d.end))}px)`
   );
-
-// Add label
-bar
-  .enter()
-  .append('span')
-  .attr('style', 'position: absolute;display: block;white-space: pre-line;')
-  .style('left', (d) => {
-    return x(d.name) + 'px';
-  })
-  .style('top', (d) => {
-    if (d.class === 'negative') {
-      return y(d.end) + 'px';
-    }
-    return y(Math.max(d.start, d.end)) + 'px';
-  })
-  .style('width', () => x.bandwidth() * 2 + 'px')
-  .style('transform', (d) => {
-    if (d.class === 'positive' || d.class === 'total') {
-      return `translate(-${x.bandwidth() / 2 + 'px'}, -100%)`;
-    } else {
-      return `translate(-${x.bandwidth() / 2 + 'px'}, 0)`;
-    }
-  })
-  .style('word-break', 'break-all')
-  .text((d) => d.name)
-  .style('text-align', 'center');
+// var bar = chart.selectAll('.bar').data(data);
+console.log(a);
