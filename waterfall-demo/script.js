@@ -52,12 +52,6 @@ for (let i = 0; i < data.length; i++) {
   else cumulative -= data[i].value;
   data[i].end = cumulative;
 }
-// data.push({
-//   name: 'Total',
-//   end: cumulative,
-//   start: 0,
-//   class: 'total',
-// });
 
 data = data.map((d) => {
   if (d.start < 0) {
@@ -96,14 +90,6 @@ y.domain([
 ]);
 
 var bar = chart.selectAll('.bar').data(data);
-// .enter()
-// .append('g')
-// .attr('class', function (d) {
-//   return 'bar ' + d.class;
-// })
-// .attr('transform', function (d) {
-//   return 'translate(' + x(d.name) + ',0)';
-// });
 
 bar
   .enter()
@@ -128,12 +114,10 @@ bar
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   })
   .style('outline', '1px solid black')
-  .style('outline', '1px solid black')
   .style('height', (d) => {
     return Math.abs(y(d.start) - y(d.end)) + 'px';
   })
   .style('transform', (d) => {
-    console.log(x(d.name));
     return 'translate(' + x(d.name) + 'px,0px)';
   })
   .attr('class', (d, i) => i)
@@ -144,29 +128,19 @@ bar
 
 // console.log(bar.selectAll('.bar'));
 // Draw line for connecting each bar
-console.log(bar.enter());
 bar
   .enter()
   .append('svg')
   .style('z-index', () => -1)
-  // .enter()
   .append('line')
   .attr('x1', (d) => x(d.name))
   .attr('y1', (d, i) => {
-    console.log(data[i].class, data[i + 1]?.class);
-    if (data[i].class === 'negative' && data[i + 1]?.class === 'negative') {
-      console.log(i);
-      return y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end));
-    } else if (data[i].class === 'negative' && data[i + 1]?.class === 'total') {
-      return y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end));
-    } else if (
-      data[i].class === 'negative' &&
-      data[i + 1]?.class === 'positive'
-    ) {
-      return y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end));
-    }
+    const fromBottom = () =>
+      y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end));
+    const fromTop = () => y(Math.max(d.start, d.end));
 
-    return y(Math.max(d.start, d.end));
+    if (data[i].class === 'negative') return fromBottom();
+    return fromTop();
   })
   .attr('x2', (d, i) => {
     return data[i + 1]
