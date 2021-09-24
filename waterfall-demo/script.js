@@ -98,7 +98,6 @@ bar
     console.log(x(d.name));
     return 'translate(' + x(d.name) + 'px,0px)';
   })
-  .style('z-index', () => 10)
   .attr('class', (d, i) => i)
   .on('click', (d) => {
     console.log(d);
@@ -111,6 +110,7 @@ console.log(bar.enter());
 bar
   .enter()
   .append('svg')
+  .style('z-index', () => -1)
   // .enter()
   .append('line')
   .attr('x1', (d) => x(d.name))
