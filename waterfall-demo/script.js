@@ -14,9 +14,19 @@ let data = [
     class: 'positive',
   },
   {
+    name: '',
+    value: 0,
+    class: 'placeholder',
+  },
+  {
     name: 'DC costs reduction* ($ 17.5k) ddfdfdf sdsdsdsd',
     value: 17000,
     class: 'negative',
+  },
+  {
+    name: '',
+    value: 0,
+    class: 'placeholder',
   },
   {
     name: 'Energy costs reduction* ($ 41.6k)',
@@ -24,9 +34,19 @@ let data = [
     class: 'negative',
   },
   {
+    name: '',
+    value: 0,
+    class: 'placeholder',
+  },
+  {
     name: 'Estimation without GreenStruxure* ($ 10',
     value: 22000,
     class: 'positive',
+  },
+  {
+    name: '',
+    value: 0,
+    class: 'placeholder',
   },
   {
     name: 'Estimation without GreenStruxure* ($ 105.5k',
@@ -34,9 +54,19 @@ let data = [
     class: 'positive',
   },
   {
+    name: '',
+    value: 0,
+    class: 'placeholder',
+  },
+  {
     name: 'Estimation without($ 105.5k)',
     value: 2000,
     class: 'positive',
+  },
+  {
+    name: '',
+    value: 0,
+    class: 'placeholder',
   },
   {
     name: 'without GreenStruxssdsdure* ($ 105.5k)',
@@ -63,14 +93,19 @@ data = data.map((d) => {
   return d;
 });
 
+// for (let index = 0; index < data.length; index++) {
+//   const element =
+// }
+
 console.log(data);
 var width = '100%';
 var height = 300;
 var chart = d3
   .select('.graph')
   .style('position', 'relative')
+  .style('max-width', '600px')
   .style('display', 'flex')
-  .style('justify-content', 'space-evenly')
+  .style('justify-content', 'space-between')
   .attr('width', width + 'px')
   .style('width', width)
   .attr('height', height + 'px');
@@ -99,19 +134,35 @@ bar
   .append('div')
   .attr('style', 'display: inline-block;')
 
-  .style('width', () => {
+  .style('width', (d) => {
+    if (d.class === 'placeholder') {
+      return '20px';
+    }
     return '50px';
   })
+  .attr('class', (d) => d.class)
   .style('height', (d) => {
+    // if (d.class === 'placeholder') {
+    //   return '100%';
+    // }
     return Math.abs(y(d.start) - y(d.end)) + 'px';
   })
   .style('background-color', function (d, i) {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   })
-  .style(
-    'transform',
-    (d) => `translate(-50%, ${y(Math.max(d.start, d.end))}px)`
-  )
+  .style('transform', (d) => `translate(0, ${y(Math.max(d.start, d.end))}px)`)
+  // .style('flex-basis', (d) => {
+  //   console.log(d.class);
+  //   return d.class === 'placeholder' ? '50%' : '100%';
+  // })
+  .style('flex-shrink', (d) => {
+    console.log(d.class);
+    return d.class === 'placeholder' ? '3' : '1';
+  })
+  .style('flex-grow', (d) => {
+    console.log(d.class);
+    return d.class === 'placeholder' ? '1' : '0';
+  })
   // .style('margin-top', (d) => y(Math.max(d.start, d.end)) + 'px')
   // .style('margin-left', '20px')
   .on('click', (d) => {
@@ -190,9 +241,20 @@ a.enter()
   .style('width', '100%')
   .style('height', '1px')
   .style('background-color', 'black')
-  .style(
-    'transform',
-    (d) => `translate(0px, ${y(Math.max(d.start, d.end))}px)`
-  );
+  .style('transform', (d) => `translate(0px, ${y(Math.max(d.start, d.end))}px)`)
+  .style('flex-shrink', (d) => {
+    console.log(d.class);
+    return d.class === 'placeholder' ? '3' : '1';
+  })
+  .style('width', (d) => {
+    if (d.class === 'placeholder') {
+      return '20px';
+    }
+    return '50px';
+  })
+  .style('flex-grow', (d) => {
+    console.log(d.class);
+    return d.class === 'placeholder' ? '1' : '0';
+  });
 // var bar = chart.selectAll('.bar').data(data);
 console.log(a);
