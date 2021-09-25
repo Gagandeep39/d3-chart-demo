@@ -26,7 +26,7 @@ function resetWidth() {
 function removeChart() {
   d3.select('#expanded')
     .transition()
-    .duration(300)
+    .duration(200)
     .style('width', '5%')
     .style('height', 0)
     .remove();
@@ -128,13 +128,18 @@ function createChart(e) {
     .select(e.target.parentElement)
     .append('div')
     .attr('id', 'expanded')
+    .style('width', width)
+    .style('background-color', 'darkgray')
+    .style('transform', 'translateY(-60px)')
+    .style('position', 'relative')
+    .style('height', height + 34 + 60 + 'px')
+    .append('div')
     .style('position', 'absolute')
     .style('display', 'flex')
+    .style('left', '2%')
+    .style('right', '2%')
     .style('justify-content', 'space-between')
-    .style('background-color', 'darkgray')
-    .attr('width', width + 'px')
-    .style('width', width)
-    .attr('height', height + 'px')
+    .style('bottom', '34px')
     .style('height', height + 'px');
 
   let y = d3.scaleLinear().range([height, 0]);
@@ -252,6 +257,15 @@ function createChart(e) {
     .style('opacity', '0.5')
     .attr('class', 'abc')
     .style('background-color', 'red');
+
+  // Active month
+  d3.select('#expanded > div')
+    .append('span')
+    .style('position', 'absolute')
+    .style('bottom', 0)
+    .style('left', '50%')
+    .style('transform', 'translate(-50%, 100%)')
+    .text('Month + year');
 }
 items.forEach((item) => {
   // Apply Click listener
@@ -303,3 +317,27 @@ d3.selectAll('.predicted')
   .attr('style', (d, e) => {
     return 'height: ' + y(d.predicted) + 'px; width: 100%;';
   });
+d3.selectAll('.item')
+  .data(data)
+  .append('span')
+  .text((d, i) => {
+    console.log(i);
+    return new Date(`${i + 1}/10/1999`)
+      .toLocaleString('en-us', {
+        month: 'long',
+      })
+      .slice(0, 3);
+  })
+  .style('position', 'absolute')
+  .style('bottom', 0)
+  .style('text-align', 'center')
+  .style('left', '50%')
+  .style('transform', 'translate(-50%, 100%)');
+
+d3.select('.container')
+  .append('span')
+  .style('position', 'absolute')
+  .style('bottom', 0)
+  .style('height', '1px')
+  .style('width', '100%')
+  .style('background-color', 'black');
