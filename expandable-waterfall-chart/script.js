@@ -4,9 +4,19 @@ const items = document.querySelectorAll('.item');
 
 // reset width of all item to 5%
 function resetWidth() {
+  removeChart();
   items.forEach((item) => {
     item.style.width = '5%';
   });
+}
+
+function removeChart() {
+  d3.select('#expanded')
+    .transition()
+    .duration(300)
+    .style('width', '5%')
+    .style('height', 0)
+    .remove();
 }
 function createChart(e) {
   let node = document.createElement('div');
@@ -236,15 +246,7 @@ items.forEach((item) => {
     console.log(item.style.width);
     if (item.style.width === '50%') {
       item.style.width = '5%';
-      d3.select('#expanded')
-        .transition()
-        .duration(300)
-        .style('width', '5%')
-        .style('height', 0)
-        .remove();
-      // setTimeout(() => {
-      //   document.getElementById('expanded').remove();
-      // }, 300);
+      removeChart();
       return;
     } else {
       resetWidth();
