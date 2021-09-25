@@ -133,6 +133,10 @@ bar
   .enter()
   .append('div')
   .attr('style', 'display: inline-block;')
+  // .style('box-sizing', 'content-box')
+  .style('border-bottom', (d) =>
+    d.class !== 'placeholder' ? '1px solid black' : ''
+  )
 
   .style('width', (d) => {
     if (d.class === 'placeholder') {
@@ -142,13 +146,11 @@ bar
   })
   .attr('class', (d) => d.class)
   .style('height', (d) => {
-    // if (d.class === 'placeholder') {
-    //   return '100%';
-    // }
     return Math.abs(y(d.start) - y(d.end)) + 'px';
   })
   .style('background-color', function (d, i) {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    if (d.class === 'placeholder') return '';
+    return '#' + Math.random().toString(16).slice(-6);
   })
   .style('transform', (d) => `translate(0, ${y(Math.max(d.start, d.end))}px)`)
   // .style('flex-basis', (d) => {
@@ -163,8 +165,7 @@ bar
     console.log(d.class);
     return d.class === 'placeholder' ? '1' : '0';
   })
-  // .style('margin-top', (d) => y(Math.max(d.start, d.end)) + 'px')
-  // .style('margin-left', '20px')
+
   .on('click', (d) => {
     console.log(d);
   });
@@ -231,7 +232,7 @@ let a = chart
   .style('position', 'absolute')
   .style('display', 'flex')
   .style('justify-content', 'space-between')
-  .style('backgroud-color', 'green')
+  .style('z-index', -1)
   .style('top', 0)
   .style('left', 0)
   .selectAll('.line-item')
@@ -241,11 +242,15 @@ a.enter()
   .style('width', '100%')
   .style('height', '1px')
   .style('background-color', 'black')
-  .style('transform', (d) => `translate(0px, ${y(Math.max(d.start, d.end))}px)`)
+  .style(
+    'transform',
+    (d) => `translate(0px, calc(${y(Math.max(d.start, d.end))}px - 100%))`
+  )
   .style('flex-shrink', (d) => {
     console.log(d.class);
     return d.class === 'placeholder' ? '3' : '1';
   })
+  .style('box-sizing', 'border-box')
   .style('width', (d) => {
     if (d.class === 'placeholder') {
       return '20px';
@@ -256,5 +261,3 @@ a.enter()
     console.log(d.class);
     return d.class === 'placeholder' ? '1' : '0';
   });
-// var bar = chart.selectAll('.bar').data(data);
-console.log(a);
