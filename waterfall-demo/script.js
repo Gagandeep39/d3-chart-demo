@@ -261,3 +261,19 @@ a.enter()
     console.log(d.class);
     return d.class === 'placeholder' ? '1' : '0';
   });
+
+// console.log();
+chart
+  .selectAll('.total')
+  .style('position', 'relative')
+  .append('div')
+  .style('width', '1px')
+  .style('height', () => {
+    return Math.abs(y(data[0].start) - y(data[0].end)) + 'px';
+  })
+  .style('position', 'absolute')
+  .style('bottom', 0)
+  .style('left', '50%')
+  .style('opacity', '0.5')
+  .attr('class', 'abc')
+  .style('background-color', 'red');

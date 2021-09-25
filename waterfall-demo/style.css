@@ -14,7 +14,6 @@ body {
   height: 100vh;
   justify-content: center;
   /* Preents scrollbar from showing by default */
-  overflow: hidden;
   color: rebeccapurple;
 }
 
@@ -28,4 +27,13 @@ svg {
   position: absolute;
   height: 100%;
   width: 100%;
+}
+
+.abc::before {
+  content: '';
+  width: 50px;
+  position: absolute;
+  background-color: red;
+  transform: translateX(-50%);
+  height: 1px;
 }
