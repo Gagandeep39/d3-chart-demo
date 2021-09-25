@@ -37,13 +37,13 @@ body {
 
 .actual {
   height: 90%;
-  background-color: green;
+  background-color: red;
   position: absolute;
   bottom: 0;
 }
 .predicted {
   height: 80%;
-  background-color: rgb(211, 45, 45);
+  background-color: green;
   position: absolute;
   bottom: 0;
 }

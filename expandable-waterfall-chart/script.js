@@ -307,11 +307,11 @@ y.domain([
 ]);
 
 console.log(d3.selectAll('.item').data(data));
-d3.selectAll('.actual')
-  .data(data)
-  .attr('style', (d, e) => {
-    return 'height: ' + y(d.actual) + 'px; width: 100%';
-  });
+// d3.selectAll('.actual')
+//   .data(data)
+//   .attr('style', (d, e) => {
+//     return 'height: ' + y(d.actual) + 'px; width: 100%';
+//   });
 d3.selectAll('.predicted')
   .data(data)
   .attr('style', (d, e) => {
@@ -341,3 +341,17 @@ d3.select('.container')
   .style('height', '1px')
   .style('width', '100%')
   .style('background-color', 'black');
+
+d3.selectAll('.actual')
+  .data(data)
+  .style('position', 'relative')
+  .style('width', '1px')
+  .style('height', (d) => {
+    return y(d.actual) + 'px';
+  })
+  .style('position', 'absolute')
+  .style('bottom', 0)
+  .style('left', '50%')
+  .style('opacity', '0.5')
+  .attr('class', 'abc')
+  .style('background-color', 'red');
