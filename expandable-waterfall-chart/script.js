@@ -106,7 +106,6 @@ function createChart(e) {
     .append('div')
     .attr('id', 'expanded')
     .style('position', 'absolute')
-    .style('max-width', '600px')
     .style('display', 'flex')
     .style('justify-content', 'space-between')
     .style('background-color', 'darkgray')
@@ -135,7 +134,7 @@ function createChart(e) {
     .enter()
     .append('div')
     .attr('style', 'display: inline-block;')
-    // .style('box-sizing', 'content-box')
+    .style('z-index', 1)
     .style('border-bottom', (d) =>
       d.class !== 'placeholder' ? '1px solid black' : ''
     )
@@ -155,22 +154,81 @@ function createChart(e) {
       return '#' + Math.random().toString(16).slice(-6);
     })
     .style('transform', (d) => `translate(0, ${y(Math.max(d.start, d.end))}px)`)
-    // .style('flex-basis', (d) => {
-    //   console.log(d.class);
-    //   return d.class === 'placeholder' ? '50%' : '100%';
-    // })
+
+    .style('flex-shrink', (d) => {
+      return d.class === 'placeholder' ? '3' : '1';
+    })
+    .style('flex-grow', (d) => {
+      return d.class === 'placeholder' ? '1' : '0';
+    })
+    .append('span')
+    .style('position', 'absolute')
+
+    .style('left', '50%')
+    .text((d) => d.name)
+    .style('text-align', 'center')
+    .style('bottom', (d) => (d.class === 'negative' ? '0' : 'unset'))
+    .style('top', (d) => {
+      console.log(data[0].start - data[data.length - 1].start);
+      if (d.class !== 'total') return 0 + 'px';
+      else return -y(Math.max(d.start, d.end)) + 'px';
+    })
+    .style('transform', (d) => {
+      if (d.class === 'negative') return 'translate(-50%, 100%)';
+      return 'translate(-50%, -100%)';
+    });
+
+  let a = chart
+    .append('div')
+    .style('width', '100%')
+    .style('height', '100%')
+    .style('position', 'absolute')
+    .style('display', 'flex')
+    .style('justify-content', 'space-between')
+    .style('top', 0)
+    .style('left', 0)
+    .selectAll('.line-item')
+    .data(data);
+  a.enter()
+    .append('div')
+    .style('width', '100%')
+    .style('height', '1px')
+    .style('background-color', 'black')
+    .style(
+      'transform',
+      (d) => `translate(0px, calc(${y(Math.max(d.start, d.end))}px - 100%))`
+    )
     .style('flex-shrink', (d) => {
       console.log(d.class);
       return d.class === 'placeholder' ? '3' : '1';
     })
+    .style('box-sizing', 'border-box')
+    .style('width', (d) => {
+      if (d.class === 'placeholder') {
+        return '20px';
+      }
+      return '50px';
+    })
     .style('flex-grow', (d) => {
       console.log(d.class);
       return d.class === 'placeholder' ? '1' : '0';
-    })
-
-    .on('click', (d) => {
-      console.log(d);
     });
+
+  // console.log();
+  chart
+    .selectAll('.total')
+    .style('position', 'relative')
+    .append('div')
+    .style('width', '1px')
+    .style('height', () => {
+      return Math.abs(y(data[0].start) - y(data[0].end)) + 'px';
+    })
+    .style('position', 'absolute')
+    .style('bottom', 0)
+    .style('left', '50%')
+    .style('opacity', '0.5')
+    .attr('class', 'abc')
+    .style('background-color', 'red');
 }
 items.forEach((item) => {
   // Apply Click listener
