@@ -76,7 +76,6 @@ var height = 300;
 var chart = d3
   .select('.graph')
   .style('position', 'relative')
-  .style('max-width', '600px')
   .style('display', 'flex')
   .style('justify-content', 'space-between')
   .attr('width', width + 'px')
@@ -98,6 +97,7 @@ bar
   .enter()
   .append('div')
   .attr('style', 'display: inline-block;')
+  .style('z-index', 1)
   .style('border-bottom', (d) =>
     d.class !== 'placeholder' ? '1px solid black' : ''
   )
@@ -148,7 +148,6 @@ let a = chart
   .style('position', 'absolute')
   .style('display', 'flex')
   .style('justify-content', 'space-between')
-  .style('z-index', -1)
   .style('top', 0)
   .style('left', 0)
   .selectAll('.line-item')
