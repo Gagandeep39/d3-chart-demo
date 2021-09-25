@@ -12,7 +12,21 @@ for (let index = 0; index < 12; index++) {
 `;
   container.appendChild(newDiv);
 }
-
+const data = [
+  { actual: 99000, predicted: 60000 },
+  { actual: 95000, predicted: 70000 },
+  { actual: 90000, predicted: 75000 },
+  { actual: 10000, predicted: 80000 },
+  { actual: 106000, predicted: 99000 },
+  { actual: 105000, predicted: 80000 },
+  { actual: 104000, predicted: 100000 },
+  { actual: 101000, predicted: 80000 },
+  { actual: 103000, predicted: 90000 },
+  { actual: 104000, predicted: 82000 },
+  { actual: 105000, predicted: 83000 },
+  { actual: 106000, predicted: 84000 },
+];
+const data2 = data;
 const items = document.querySelectorAll('.item');
 
 // reset width of all item to 5%
@@ -128,10 +142,12 @@ function createChart(e) {
     .select(e.target.parentElement)
     .append('div')
     .attr('id', 'expanded')
-    .style('width', width)
+    .style('overflow', 'hidden')
     .style('background-color', 'darkgray')
     .style('transform', 'translateY(-60px)')
     .style('position', 'relative')
+    // .transition(2000)
+    .style('width', width)
     .style('height', height + 34 + 60 + 'px')
     .append('div')
     .style('position', 'absolute')
@@ -154,6 +170,10 @@ function createChart(e) {
     d3.max(data, function (d) {
       return d.end;
     }),
+    // Original scale
+    // d3.max(data2, function (d) {
+    //   return d.actual;
+    // }),
   ]);
 
   var bar = chart.selectAll('.bar').data(data);
@@ -227,7 +247,6 @@ function createChart(e) {
       (d) => `translate(0px, calc(${y(Math.max(d.start, d.end))}px - 100%))`
     )
     .style('flex-shrink', (d) => {
-      console.log(d.class);
       return d.class === 'placeholder' ? '3' : '1';
     })
     .style('box-sizing', 'border-box')
@@ -238,7 +257,6 @@ function createChart(e) {
       return '50px';
     })
     .style('flex-grow', (d) => {
-      console.log(d.class);
       return d.class === 'placeholder' ? '1' : '0';
     });
 
@@ -285,20 +303,6 @@ items.forEach((item) => {
 
 const y = d3.scaleLinear().range([0, 300]);
 
-const data = [
-  { actual: 99000, predicted: 60000 },
-  { actual: 95000, predicted: 70000 },
-  { actual: 90000, predicted: 75000 },
-  { actual: 10000, predicted: 80000 },
-  { actual: 106000, predicted: 99000 },
-  { actual: 105000, predicted: 80000 },
-  { actual: 104000, predicted: 100000 },
-  { actual: 101000, predicted: 80000 },
-  { actual: 103000, predicted: 90000 },
-  { actual: 104000, predicted: 82000 },
-  { actual: 105000, predicted: 83000 },
-  { actual: 106000, predicted: 84000 },
-];
 y.domain([
   0,
   d3.max(data, function (d) {
