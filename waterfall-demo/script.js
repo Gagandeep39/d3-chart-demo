@@ -1,12 +1,5 @@
 import * as d3 from 'https://cdn.skypack.dev/d3@7';
 
-// let data = [
-//   { name: 'Product Revenue', value: 42000, class: 'positive' },
-//   { name: 'Services Revenue', value: 21000, class: 'positive' },
-//   { name: 'Fixed Costs', value: 17000, class: 'negative' },
-//   { name: 'Variable Costs', value: 14000, class: 'negative' },
-// ];
-
 let data = [
   {
     name: 'Estimation without GreenStruxure* ($ 105.5k)',
@@ -14,19 +7,9 @@ let data = [
     class: 'positive',
   },
   {
-    name: '',
-    value: 0,
-    class: 'placeholder',
-  },
-  {
     name: 'DC costs reduction* ($ 17.5k) ddfdfdf sdsdsdsd',
     value: 17000,
     class: 'negative',
-  },
-  {
-    name: '',
-    value: 0,
-    class: 'placeholder',
   },
   {
     name: 'Energy costs reduction* ($ 41.6k)',
@@ -34,19 +17,9 @@ let data = [
     class: 'negative',
   },
   {
-    name: '',
-    value: 0,
-    class: 'placeholder',
-  },
-  {
     name: 'Estimation without GreenStruxure* ($ 10',
     value: 22000,
     class: 'positive',
-  },
-  {
-    name: '',
-    value: 0,
-    class: 'placeholder',
   },
   {
     name: 'Estimation without GreenStruxure* ($ 105.5k',
@@ -54,19 +27,9 @@ let data = [
     class: 'positive',
   },
   {
-    name: '',
-    value: 0,
-    class: 'placeholder',
-  },
-  {
     name: 'Estimation without($ 105.5k)',
     value: 2000,
     class: 'positive',
-  },
-  {
-    name: '',
-    value: 0,
-    class: 'placeholder',
   },
   {
     name: 'without GreenStruxssdsdure* ($ 105.5k)',
@@ -74,6 +37,20 @@ let data = [
     class: 'total',
   },
 ];
+
+let modifiedData = [];
+
+data.forEach((ch, idx) => {
+  modifiedData.push(ch);
+  console.log(idx);
+  if (idx === data.length - 1) return;
+  modifiedData.push({
+    name: '',
+    value: 0,
+    class: 'placeholder',
+  });
+});
+data = [...modifiedData];
 
 let cumulative = 0;
 for (let i = 0; i < data.length; i++) {
@@ -93,10 +70,6 @@ data = data.map((d) => {
   return d;
 });
 
-// for (let index = 0; index < data.length; index++) {
-//   const element =
-// }
-
 console.log(data);
 var width = '100%';
 var height = 300;
@@ -109,17 +82,9 @@ var chart = d3
   .attr('width', width + 'px')
   .style('width', width)
   .attr('height', height + 'px');
-// .append('g');
-// Scale
-// let x = d3.scaleBand().range([0, 600]).padding(0.4);
 
 let y = d3.scaleLinear().range([height, 0]);
 
-// x.domain(
-//   data.map(function (d) {
-//     return d.name;
-//   })
-// );
 y.domain([
   0,
   d3.max(data, function (d) {
@@ -133,7 +98,6 @@ bar
   .enter()
   .append('div')
   .attr('style', 'display: inline-block;')
-  // .style('box-sizing', 'content-box')
   .style('border-bottom', (d) =>
     d.class !== 'placeholder' ? '1px solid black' : ''
   )
@@ -153,78 +117,30 @@ bar
     return '#' + Math.random().toString(16).slice(-6);
   })
   .style('transform', (d) => `translate(0, ${y(Math.max(d.start, d.end))}px)`)
-  // .style('flex-basis', (d) => {
-  //   console.log(d.class);
-  //   return d.class === 'placeholder' ? '50%' : '100%';
-  // })
+
   .style('flex-shrink', (d) => {
-    console.log(d.class);
     return d.class === 'placeholder' ? '3' : '1';
   })
   .style('flex-grow', (d) => {
-    console.log(d.class);
     return d.class === 'placeholder' ? '1' : '0';
   })
+  .append('span')
+  .style('position', 'absolute')
 
-  .on('click', (d) => {
-    console.log(d);
+  .style('left', '50%')
+  .text((d) => d.name)
+  .style('text-align', 'center')
+  .style('bottom', (d) => (d.class === 'negative' ? '0' : 'unset'))
+  .style('top', (d) => {
+    console.log(data[0].start - data[data.length - 1].start);
+    if (d.class !== 'total') return 0 + 'px';
+    else return -y(Math.max(d.start, d.end)) + 'px';
+  })
+  .style('transform', (d) => {
+    if (d.class === 'negative') return 'translate(-50%, 100%)';
+    return 'translate(-50%, -100%)';
   });
 
-// Connector
-// bar
-//   .enter()
-//   .append('div')
-//   .style('display', 'inline-block')
-//   .style('position', 'absolute')
-//   .style('height', '1px')
-//   .style('background-color', 'black')
-//   .style('left', (d) => {
-//     return x(d.name) + 'px';
-//   })
-//   .style('width', (d) =>
-//     d.class === 'total' ? 0 : x.bandwidth() * 2 + x.padding() * x.step() + 'px'
-//   )
-//   .style('top', (d) =>
-//     d.class === 'positive'
-//       ? y(Math.max(d.start, d.end)) + 'px'
-//       : y(Math.max(d.start, d.end)) + Math.abs(y(d.start) - y(d.end)) + 'px'
-//   );
-
-// // Add label
-// bar
-//   .enter()
-//   .append('span')
-//   .attr('style', 'position: absolute;display: block;white-space: pre-line;')
-//   .style('left', (d) => {
-//     return x(d.name) + 'px';
-//   })
-//   .style('top', (d) => {
-//     if (d.class === 'negative') {
-//       return y(d.end) + 'px';
-//     }
-//     return y(Math.max(d.start, d.end)) + 'px';
-//   })
-//   .style('width', () => x.bandwidth() * 2 + 'px')
-//   .style('transform', (d) => {
-//     if (d.class === 'positive' || d.class === 'total') {
-//       return `translate(-${x.bandwidth() / 2 + 'px'}, -100%)`;
-//     } else {
-//       return `translate(-${x.bandwidth() / 2 + 'px'}, 0)`;
-//     }
-//   })
-//   .style('word-break', 'break-all')
-//   .text((d) => d.name)
-//   .style('text-align', 'center');
-
-// Connectio
-
-// bar
-//   .enter()
-//   .append('div')
-//   .attr('style', 'display: inline-block;')
-//   .style('width', '100%')
-//   .style('height', '1px')
-//   .style('background-color', 'black');
 let a = chart
   .append('div')
   .style('width', '100%')

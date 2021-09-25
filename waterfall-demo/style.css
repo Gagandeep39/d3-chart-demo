@@ -16,6 +16,11 @@ body {
   /* Preents scrollbar from showing by default */
   color: rebeccapurple;
 }
+.wrapper {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 16px;
+}
 
 .graph {
   width: 600px;
