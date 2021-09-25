@@ -1,5 +1,18 @@
 import * as d3 from 'https://cdn.skypack.dev/d3@7';
 
+const container = document.querySelectorAll('.container')[0];
+console.log(container);
+for (let index = 0; index < 12; index++) {
+  let newDiv = document.createElement('div');
+  newDiv.className = 'item';
+  newDiv.id = index;
+  newDiv.innerHTML = `
+<div class="actual"></div>
+        <div class="predicted"></div>
+`;
+  container.appendChild(newDiv);
+}
+
 const items = document.querySelectorAll('.item');
 
 // reset width of all item to 5%
@@ -244,13 +257,13 @@ items.forEach((item) => {
   // Apply Click listener
   item.addEventListener('click', (e) => {
     console.log(item.style.width);
-    if (item.style.width === '50%') {
+    if (item.style.width === '40%') {
       item.style.width = '5%';
       removeChart();
       return;
     } else {
       resetWidth();
-      item.style.width = 50 + '%';
+      item.style.width = 40 + '%';
       createChart(e);
     }
   });
@@ -267,6 +280,10 @@ const data = [
   { actual: 105000, predicted: 80000 },
   { actual: 104000, predicted: 100000 },
   { actual: 101000, predicted: 80000 },
+  { actual: 103000, predicted: 90000 },
+  { actual: 104000, predicted: 82000 },
+  { actual: 105000, predicted: 83000 },
+  { actual: 106000, predicted: 84000 },
 ];
 y.domain([
   0,
